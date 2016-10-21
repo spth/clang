@@ -7550,6 +7550,8 @@ class SDCCTargetInfo : public TargetInfo {
        assert(0 && "Invalid target name for SDCC");
   }
 
+  unsigned getShortAlign() const override { return 8; }; // Short alignment is overridden differently from the other alignments.
+
   void getTargetDefines(const LangOptions &Opts,
                         MacroBuilder &Builder) const override {
     Builder.defineMacro("__SDCC");
