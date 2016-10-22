@@ -7530,6 +7530,8 @@ class SDCCTargetInfo : public TargetInfo {
     LongLongAlign = 8;
     FloatWidth = 32;
     FloatAlign = 8;
+    DoubleWidth = 32;
+    DoubleAlign = 8;
     SizeType = UnsignedInt;
     IntPtrType = SignedInt;
     WCharType = UnsignedLong;

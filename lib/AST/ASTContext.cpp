@@ -1903,7 +1903,7 @@ unsigned ASTContext::getPreferredTypeAlign(const Type *T) const {
   if (T->isMemberPointerType())
     return getPreferredTypeAlign(getPointerDiffType().getTypePtr());
 
-  if (Target->getTriple().getArch() == llvm::Triple::xcore)
+  if (Target->getTriple().getArch() == llvm::Triple::xcore || Target->getTriple().getArchName() == "sdcc")
     return ABIAlign;  // Never overalign on XCore.
 
   // Double and long long should be naturally aligned if possible.
