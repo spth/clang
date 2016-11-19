@@ -1,4 +1,4 @@
-This is a fork of clang, the LLVm cfe. The purpose is to get a cfe->opt->cbe->SDCC toolchain,
+This is a fork of clang, the LLVM cfe. The purpose is to get a cfe->opt->cbe->SDCC toolchain,
 to be able to use LLVM optimizations and language support with SDCC. Thus clang needs targets
 the target architecture of SDCC, to support suitbale type sizes, alignment, etc.
 
