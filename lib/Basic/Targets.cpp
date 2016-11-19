@@ -8112,6 +8112,78 @@ public:
   }
 };
 
+// SDCC STM8 target
+class SDCCTargetInfo : public TargetInfo {
+ public:
+  SDCCTargetInfo(const llvm::Triple &Triple) : TargetInfo(Triple) {
+    PointerWidth = 16;
+    PointerAlign = 8;
+    IntWidth = 16;
+    IntAlign = 8;
+    LongWidth = 32;
+    LongAlign = 8;
+    LongLongWidth = 64;
+    LongLongAlign = 8;
+    FloatWidth = 32;
+    FloatAlign = 8;
+    DoubleWidth = 32;
+    DoubleAlign = 8;
+    SizeType = UnsignedInt;
+    IntPtrType = SignedInt;
+    WCharType = UnsignedLong;
+    Char32Type = UnsignedLong;
+
+    assert(Triple.getArchName() == "sdcc" && "Invalid target name for SDCC");
+    if(Triple.getVendorName() == "stm8")
+      {
+        BigEndian = true;
+        resetDataLayout("E-p:16:8-i1:8-i8:8-i16:8-i32:8-i64:8-f32:8-a:8");
+      }
+     else if(Triple.getVendorName() == "z80" || Triple.getVendorName() == "z180" || Triple.getVendorName() == "gbz80" || Triple.getVendorName() == "r2k" || Triple.getVendorName() == "r3ka" || Triple.getVendorName() == "tlcs90")
+      {
+        BigEndian = false;
+        resetDataLayout("e-p:16:8-i1:8-i8:8-i16:8-i32:8-i64:8-f32:8-a:8");
+      }
+     else
+       assert(0 && "Invalid target name for SDCC");
+  }
+
+  unsigned getShortAlign() const override { return 8; }; // Short alignment is overridden differently from the other alignments.
+
+  void getTargetDefines(const LangOptions &Opts,
+                        MacroBuilder &Builder) const override {
+    Builder.defineMacro("__SDCC");
+    Builder.defineMacro("__SDCC_stm8");
+  }
+  ArrayRef<Builtin::Info> getTargetBuiltins() const override {
+    // FIXME: Implement.
+    return None;
+  }
+  ArrayRef<const char *> getGCCRegNames() const override {
+    return None;
+  }
+  ArrayRef<TargetInfo::GCCRegAlias> getGCCRegAliases() const override {
+    // No aliases.
+    return None;
+  }
+  bool validateAsmConstraint(const char *&Name,
+                             TargetInfo::ConstraintInfo &info) const override {
+    // No target constraints for now.
+    return false;
+  }
+  const char *getClobbers() const override {
+    // FIXME: Is this really right?
+    return "";
+  }
+  BuiltinVaListKind getBuiltinVaListKind() const override {
+    // FIXME: implement
+    return TargetInfo::CharPtrBuiltinVaList;
+  }
+  bool allowsLargerPreferedTypeAlignment() const override {
+    return false;
+  }
+};
+
 } // end anonymous namespace
 
 //===----------------------------------------------------------------------===//
@@ -8124,7 +8196,7 @@ static TargetInfo *AllocateTarget(const llvm::Triple &Triple,
 
   switch (Triple.getArch()) {
   default:
-    return nullptr;
+    return new SDCCTargetInfo(Triple);
 
   case llvm::Triple::xcore:
     return new XCoreTargetInfo(Triple, Opts);

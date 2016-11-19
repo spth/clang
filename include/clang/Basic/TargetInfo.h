@@ -303,11 +303,11 @@ public:
 
   /// \brief Return the size of 'signed short' and 'unsigned short' for this
   /// target, in bits.
-  unsigned getShortWidth() const { return 16; } // FIXME
+  virtual unsigned getShortWidth() const { return 16; } // FIXME
 
   /// \brief Return the alignment of 'signed short' and 'unsigned short' for
   /// this target.
-  unsigned getShortAlign() const { return 16; } // FIXME
+  virtual unsigned getShortAlign() const { return 16; } // FIXME
 
   /// getIntWidth/Align - Return the size of 'signed int' and 'unsigned int' for
   /// this target, in bits.
